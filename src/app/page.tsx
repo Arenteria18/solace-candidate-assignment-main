@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import type { Advocate } from "../types/advocate";
 import { AdvocatesResponsiveView } from "../components/AdvocatesResponsiveView";
+import { SearchBar } from "../components/SearchBar";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function Home() {
 
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const debounced = useDebounce(searchTerm, 200);
 
   useEffect(() => {
     console.log("fetching advocates...");
@@ -20,24 +23,8 @@ export default function Home() {
     });
   }, []);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const term = e.target.value;
+  const onChange = (term: string) => {
     setSearchTerm(term);
-
-    console.log("filtering advocates...");
-    const lower = term.toLowerCase();
-  const filtered = advocates.filter((advocate) => {
-      return (
-        advocate.firstName.toLowerCase().includes(lower) ||
-        advocate.lastName.toLowerCase().includes(lower) ||
-        advocate.city.toLowerCase().includes(lower) ||
-        advocate.degree.toLowerCase().includes(lower) ||
-    advocate.specialties.some((s) => s.toLowerCase().includes(lower)) ||
-    String(advocate.yearsOfExperience).includes(term)
-      );
-    });
-
-    setFilteredAdvocates(filtered);
   };
 
   const onClick = () => {
@@ -45,21 +32,26 @@ export default function Home() {
     setFilteredAdvocates(advocates);
   };
 
+  useEffect(() => {
+    const term = debounced;
+    const lower = term.toLowerCase();
+    const filtered = advocates.filter((advocate) => {
+      return (
+        advocate.firstName.toLowerCase().includes(lower) ||
+        advocate.lastName.toLowerCase().includes(lower) ||
+        advocate.city.toLowerCase().includes(lower) ||
+        advocate.degree.toLowerCase().includes(lower) ||
+        advocate.specialties.some((s) => s.toLowerCase().includes(lower)) ||
+        String(advocate.yearsOfExperience).includes(term)
+      );
+    });
+    setFilteredAdvocates(filtered);
+  }, [debounced, advocates]);
+
   return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
-      <br />
-      <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for: <span>{searchTerm}</span>
-        </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
-      </div>
-      <br />
-      <br />
+    <main className="mx-6 my-6">
+      <h1 className="text-2xl font-semibold mb-4">Solace Advocates</h1>
+      <SearchBar value={searchTerm} onChange={onChange} onReset={onClick} />
       <AdvocatesResponsiveView data={filteredAdvocates} />
     </main>
   );
