@@ -34,9 +34,14 @@ export default function Home() {
 
   useEffect(() => {
     const term = debounced;
-    const lower = term.toLowerCase();
+    const lower = term.toLowerCase().trim();
     const filtered = advocates.filter((advocate) => {
+      const fullName = `${advocate.firstName} ${advocate.lastName}`.toLowerCase();
+      const fullNameReversed = `${advocate.lastName} ${advocate.firstName}`.toLowerCase();
       return (
+        // Match full name ("first last") or ("last first")
+        fullName.includes(lower) ||
+        fullNameReversed.includes(lower) ||
         advocate.firstName.toLowerCase().includes(lower) ||
         advocate.lastName.toLowerCase().includes(lower) ||
         advocate.city.toLowerCase().includes(lower) ||
