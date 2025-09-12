@@ -1,16 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Advocate } from "../types/advocate";
+import { AdvocatesResponsiveView } from "../components/AdvocatesResponsiveView";
 
 export default function Home() {
-  type Advocate = {
-    firstName: string;
-    lastName: string;
-    city: string;
-    degree: string;
-    specialties: string[];
-    yearsOfExperience: number;
-  };
 
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
@@ -66,36 +60,7 @@ export default function Home() {
       </div>
       <br />
       <br />
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th>Degree</th>
-            <th>Specialties</th>
-            <th>Years of Experience</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => {
-            return (
-              <tr key={`${advocate.firstName}-${advocate.lastName}`}>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div key={s}>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <AdvocatesResponsiveView data={filteredAdvocates} />
     </main>
   );
 }

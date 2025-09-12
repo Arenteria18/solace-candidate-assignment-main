@@ -19,7 +19,7 @@ Here is a list of question I would answer before I started on implementation.
 - State of the codebase.
 
 ### Product requirements 
-After the intial discovery phase, I will have a better understanding of the requirements. I will also know what questions I need to ask to fill in the missing requirements. Since this is a coding exercise I will make some assumptions about requirements and add them to the decision log. 
+After the intial discovery phase, I will have a better understanding of the requirements. I will also know what questions I need to ask to fill in the missing requirements. Since this is a coding exercise I will make some assumptions about requirements and add them to the decision log.
 
 
 ## Tickets 
@@ -43,3 +43,8 @@ need to do a quick security audit and make sure we are following best practices 
 - missing http headers
 - API need scheme validation
 - Need to rate limit API routes
+
+### UI Clean up
+the AI generated table is all in one page and needs to be broken up into smaller components. The page needs to have a basic design in place. Follow best React Practices and WCAG 2.1 AA guidance. 
+- move components out of page and into Components folder. 
+-
