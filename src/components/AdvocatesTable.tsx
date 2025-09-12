@@ -1,3 +1,4 @@
+import React from "react";
 import { Advocate } from "../types/advocate";
 import { SpecialtiesList } from "./SpecialtiesList";
 
@@ -5,7 +6,7 @@ interface Props {
   data: Advocate[];
 }
 
-export function AdvocatesTable({ data }: Props) {
+function AdvocatesTableInner({ data }: Props) {
   return (
     <div role="region" aria-label="Advocates table" className="overflow-x-auto surface">
       <table className="table-base">
@@ -54,3 +55,5 @@ export function AdvocatesTable({ data }: Props) {
     </div>
   );
 }
+
+export const AdvocatesTable = React.memo(AdvocatesTableInner);

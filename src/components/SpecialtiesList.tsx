@@ -6,7 +6,7 @@ interface Props {
 }
 
 // Renders specialties as accessible chips with consistent theme styles
-export function SpecialtiesList({ items, label = "Specialties" }: Props) {
+function SpecialtiesListInner({ items, label = "Specialties" }: Props) {
   if (!items?.length) return null;
   return (
     <div aria-label={label}>
@@ -22,3 +22,5 @@ export function SpecialtiesList({ items, label = "Specialties" }: Props) {
     </div>
   );
 }
+
+export const SpecialtiesList = React.memo(SpecialtiesListInner);
