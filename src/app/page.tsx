@@ -10,7 +10,6 @@ export default function Home() {
     degree: string;
     specialties: string[];
     yearsOfExperience: number;
-    phoneNumber: number;
   };
 
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
@@ -33,15 +32,14 @@ export default function Home() {
 
     console.log("filtering advocates...");
     const lower = term.toLowerCase();
-    const filtered = advocates.filter((advocate) => {
+  const filtered = advocates.filter((advocate) => {
       return (
         advocate.firstName.toLowerCase().includes(lower) ||
         advocate.lastName.toLowerCase().includes(lower) ||
         advocate.city.toLowerCase().includes(lower) ||
         advocate.degree.toLowerCase().includes(lower) ||
-        advocate.specialties.some((s) => s.toLowerCase().includes(lower)) ||
-        String(advocate.yearsOfExperience).includes(term) ||
-        String(advocate.phoneNumber).includes(term)
+    advocate.specialties.some((s) => s.toLowerCase().includes(lower)) ||
+    String(advocate.yearsOfExperience).includes(term)
       );
     });
 
@@ -49,7 +47,7 @@ export default function Home() {
   };
 
   const onClick = () => {
-    console.log(advocates);
+    setSearchTerm("");
     setFilteredAdvocates(advocates);
   };
 
@@ -77,15 +75,12 @@ export default function Home() {
             <th>Degree</th>
             <th>Specialties</th>
             <th>Years of Experience</th>
-            <th>Phone Number</th>
           </tr>
         </thead>
         <tbody>
           {filteredAdvocates.map((advocate) => {
             return (
-              <tr
-                key={`${advocate.firstName}-${advocate.lastName}-${advocate.phoneNumber}`}
-              >
+              <tr key={`${advocate.firstName}-${advocate.lastName}`}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
@@ -96,7 +91,6 @@ export default function Home() {
                   ))}
                 </td>
                 <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
               </tr>
             );
           })}
