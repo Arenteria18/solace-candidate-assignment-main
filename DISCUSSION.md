@@ -47,4 +47,5 @@ need to do a quick security audit and make sure we are following best practices 
 ### UI Clean up
 the AI generated table is all in one page and needs to be broken up into smaller components. The page needs to have a basic design in place. Follow best React Practices and WCAG 2.1 AA guidance. 
 - move components out of page and into Components folder. 
--
+- mobile and desktop layouts
+- add a theme 

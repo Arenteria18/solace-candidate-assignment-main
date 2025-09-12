@@ -6,34 +6,50 @@ interface Props {
 
 export function AdvocatesTable({ data }: Props) {
   return (
-    <div role="region" aria-label="Advocates table" style={{ overflowX: "auto" }}>
-      <table>
-        <caption id="adv-table-caption">Available advocates</caption>
-        <thead>
+    <div role="region" aria-label="Advocates table" className="overflow-x-auto surface">
+      <table className="table-base">
+        <caption id="adv-table-caption" className="caption">
+          Available advocates
+        </caption>
+        <thead className="thead-base">
           <tr>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">City</th>
-            <th scope="col">Degree</th>
-            <th scope="col">Specialties</th>
-            <th scope="col">Years of Experience</th>
+            <th scope="col" className="th-base">
+              First Name
+            </th>
+            <th scope="col" className="th-base">
+              Last Name
+            </th>
+            <th scope="col" className="th-base">
+              City
+            </th>
+            <th scope="col" className="th-base">
+              Degree
+            </th>
+            <th scope="col" className="th-base">
+              Specialties
+            </th>
+            <th scope="col" className="th-base">
+              Years of Experience
+            </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="tbody-base">
           {data.map((advocate) => (
-            <tr key={`${advocate.firstName}-${advocate.lastName}`}>
-              <th scope="row">{advocate.firstName}</th>
-              <td>{advocate.lastName}</td>
-              <td>{advocate.city}</td>
-              <td>{advocate.degree}</td>
-              <td>
-                <ul>
+            <tr key={`${advocate.firstName}-${advocate.lastName}`} className="tr-hover">
+              <th scope="row" className="th-row">
+                {advocate.firstName}
+              </th>
+              <td className="td-base">{advocate.lastName}</td>
+              <td className="td-base">{advocate.city}</td>
+              <td className="td-base">{advocate.degree}</td>
+              <td className="td-base align-top">
+                <ul className="list-bullets">
                   {advocate.specialties.map((s) => (
                     <li key={s}>{s}</li>
                   ))}
                 </ul>
               </td>
-              <td>{advocate.yearsOfExperience}</td>
+              <td className="td-base">{advocate.yearsOfExperience}</td>
             </tr>
           ))}
         </tbody>
