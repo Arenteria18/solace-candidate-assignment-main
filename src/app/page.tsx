@@ -32,18 +32,20 @@ export default function Home() {
     setSearchTerm(term);
 
     console.log("filtering advocates...");
-    const filteredAdvocates = advocates.filter((advocate) => {
+    const lower = term.toLowerCase();
+    const filtered = advocates.filter((advocate) => {
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience.includes(searchTerm)
+        advocate.firstName.toLowerCase().includes(lower) ||
+        advocate.lastName.toLowerCase().includes(lower) ||
+        advocate.city.toLowerCase().includes(lower) ||
+        advocate.degree.toLowerCase().includes(lower) ||
+        advocate.specialties.some((s) => s.toLowerCase().includes(lower)) ||
+        String(advocate.yearsOfExperience).includes(term) ||
+        String(advocate.phoneNumber).includes(term)
       );
     });
 
-    setFilteredAdvocates(filteredAdvocates);
+    setFilteredAdvocates(filtered);
   };
 
   const onClick = () => {
@@ -69,13 +71,13 @@ export default function Home() {
       <table>
         <thead>
           <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>Degree</th>
+            <th>Specialties</th>
+            <th>Years of Experience</th>
+            <th>Phone Number</th>
           </tr>
         </thead>
         <tbody>
