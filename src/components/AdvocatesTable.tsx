@@ -1,4 +1,5 @@
 import { Advocate } from "../types/advocate";
+import { SpecialtiesList } from "./SpecialtiesList";
 
 interface Props {
   data: Advocate[];
@@ -43,11 +44,7 @@ export function AdvocatesTable({ data }: Props) {
               <td className="td-base">{advocate.city}</td>
               <td className="td-base">{advocate.degree}</td>
               <td className="td-base align-top">
-                <ul className="list-bullets">
-                  {advocate.specialties.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ul>
+                <SpecialtiesList items={advocate.specialties} />
               </td>
               <td className="td-base">{advocate.yearsOfExperience}</td>
             </tr>

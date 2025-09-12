@@ -24,6 +24,11 @@ export function SearchBar({ value, onChange, onReset }: SearchBarProps) {
             type="search"
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && value) {
+                onReset();
+              }
+            }}
             placeholder="Name, city, degree, specialty, years"
             className="flex-1 rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--surface))] px-3 py-2 pr-9 text-sm outline-none focus:ring-2 focus:ring-[rgb(var(--focus))]"
           />

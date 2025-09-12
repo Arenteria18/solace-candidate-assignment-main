@@ -1,4 +1,5 @@
 import { Advocate } from "../types/advocate";
+import { SpecialtiesList } from "./SpecialtiesList";
 
 interface Props {
   data: Advocate[];
@@ -24,11 +25,7 @@ export function AdvocateCardList({ data }: Props) {
             <div>
               <dt>Specialties</dt>
               <dd>
-                <ul className="list-bullets">
-                  {a.specialties.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ul>
+                <SpecialtiesList items={a.specialties} />
               </dd>
             </div>
             <div>
