@@ -23,10 +23,23 @@ After the intial discovery phase, I will have a better understanding of the requ
 
 
 ## Tickets 
+These are going to be very rough for tickets, but helpful for me to keep track of everything
+
 ### squash bugs and clean up anti-patterns.
 List of bugs found:
-- `<th> cannot be a child of <thead>`
+- `<th> cannot be a child of <thead>` 
 - Uncaught Error: Hydration failed because the initial UI does not match what was rendered on the server.
   - SSR fun
 - Warning: Each child in a list should have a unique "key" prop.
 - Uncaught TypeError: advocate.yearsOfExperience.includes is not a function
+
+### Security vulnerabilities
+need to do a quick security audit and make sure we are following best practices for protecting our users data.
+
+- Add Auth to api endpoints
+- PII data for advocates is being returned. No cache controls
+- logs print full advocate logs.
+- Remove .env file from codebase or encrypt
+- missing http headers
+- API need scheme validation
+- Need to rate limit API routes
