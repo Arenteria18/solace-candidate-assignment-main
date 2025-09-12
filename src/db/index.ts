@@ -8,7 +8,12 @@ const setup = () => {
       select: () => ({
         from: () => [],
       }),
-    };
+      insert: () => ({
+        values: (_values: unknown) => ({
+          returning: () => [],
+        }),
+      }),
+    } as const;
   }
 
   // for query purposes
