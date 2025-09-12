@@ -1,5 +1,3 @@
-import db from "../../../db";
-import { advocates } from "../../../db/schema";
 import { advocateData } from "../../../db/seed/advocates";
 
 export async function GET() {
@@ -14,7 +12,11 @@ export async function GET() {
     { data },
     {
       headers: {
-        "Cache-Control": "no-store",
+  "Cache-Control": "no-store",
+  Pragma: "no-cache",
+  Expires: "0",
+  Vary: "Authorization",
+  "X-Content-Type-Options": "nosniff",
       },
     }
   );
