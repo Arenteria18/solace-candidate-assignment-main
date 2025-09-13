@@ -1,3 +1,4 @@
+import React from "react";
 import { Advocate } from "../types/advocate";
 import { SpecialtiesList } from "./SpecialtiesList";
 
@@ -5,7 +6,7 @@ interface Props {
   data: Advocate[];
 }
 
-export function AdvocateCardList({ data }: Props) {
+function AdvocateCardListInner({ data }: Props) {
   return (
     <ul aria-label="Advocates list" className="grid gap-4">
       {data.map((a) => (
@@ -38,3 +39,5 @@ export function AdvocateCardList({ data }: Props) {
     </ul>
   );
 }
+
+export const AdvocateCardList = React.memo(AdvocateCardListInner);

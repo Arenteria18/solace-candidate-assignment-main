@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Advocate } from "../types/advocate";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { AdvocatesTable } from "./AdvocatesTable";
@@ -9,7 +10,7 @@ interface Props {
   data: Advocate[];
 }
 
-export function AdvocatesResponsiveView({ data }: Props) {
+function AdvocatesResponsiveViewInner({ data }: Props) {
   const { isNarrow } = useResponsiveLayout(768);
 
   return (
@@ -24,3 +25,5 @@ export function AdvocatesResponsiveView({ data }: Props) {
     </section>
   );
 }
+
+export const AdvocatesResponsiveView = React.memo(AdvocatesResponsiveViewInner);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Advocate } from "../types/advocate";
 import { AdvocatesResponsiveView } from "../components/AdvocatesResponsiveView";
 import { SearchBar } from "../components/SearchBar";
@@ -9,37 +9,41 @@ import { useDebounce } from "../hooks/useDebounce";
 export default function Home() {
 
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const debounced = useDebounce(searchTerm, 200);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
+    const ctrl = new AbortController();
+    fetch("/api/advocates", { signal: ctrl.signal })
+      .then((response) => response.json())
+      .then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          // Optionally surface to a toast/logging service
+          console.error("Failed to load advocates", err);
+        }
       });
-    });
+    return () => ctrl.abort();
   }, []);
 
-  const onChange = (term: string) => {
+  const onChange = useCallback((term: string) => {
     setSearchTerm(term);
-  };
+  }, []);
 
-  const onClick = () => {
+  const onClick = useCallback(() => {
     setSearchTerm("");
-    setFilteredAdvocates(advocates);
-  };
+  }, []);
 
-  useEffect(() => {
+  const filteredAdvocates = useMemo(() => {
     const term = debounced;
     const lower = term.toLowerCase().trim();
-    const filtered = advocates.filter((advocate) => {
+    if (!lower) return advocates;
+    return advocates.filter((advocate) => {
       const fullName = `${advocate.firstName} ${advocate.lastName}`.toLowerCase();
       const fullNameReversed = `${advocate.lastName} ${advocate.firstName}`.toLowerCase();
       return (
-        // Match full name ("first last") or ("last first")
         fullName.includes(lower) ||
         fullNameReversed.includes(lower) ||
         advocate.firstName.toLowerCase().includes(lower) ||
@@ -50,7 +54,6 @@ export default function Home() {
         String(advocate.yearsOfExperience).includes(term)
       );
     });
-    setFilteredAdvocates(filtered);
   }, [debounced, advocates]);
 
   return (
