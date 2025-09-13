@@ -1,91 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { Advocate } from "../types/advocate";
+import { AdvocatesResponsiveView } from "../components/AdvocatesResponsiveView";
+import { SearchBar } from "../components/SearchBar";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function Home() {
-  const [advocates, setAdvocates] = useState([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+
+  const [advocates, setAdvocates] = useState<Advocate[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debounced = useDebounce(searchTerm, 200);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
+    const ctrl = new AbortController();
+    fetch("/api/advocates", { signal: ctrl.signal })
+      .then((response) => response.json())
+      .then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          // Optionally surface to a toast/logging service
+          console.error("Failed to load advocates", err);
+        }
       });
-    });
+    return () => ctrl.abort();
   }, []);
 
-  const onChange = (e) => {
-    const searchTerm = e.target.value;
+  const onChange = useCallback((term: string) => {
+    setSearchTerm(term);
+  }, []);
 
-    document.getElementById("search-term").innerHTML = searchTerm;
+  const onClick = useCallback(() => {
+    setSearchTerm("");
+  }, []);
 
-    console.log("filtering advocates...");
-    const filteredAdvocates = advocates.filter((advocate) => {
+  const filteredAdvocates = useMemo(() => {
+    const term = debounced;
+    const lower = term.toLowerCase().trim();
+    if (!lower) return advocates;
+    return advocates.filter((advocate) => {
+      const fullName = `${advocate.firstName} ${advocate.lastName}`.toLowerCase();
+      const fullNameReversed = `${advocate.lastName} ${advocate.firstName}`.toLowerCase();
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience.includes(searchTerm)
+        fullName.includes(lower) ||
+        fullNameReversed.includes(lower) ||
+        advocate.firstName.toLowerCase().includes(lower) ||
+        advocate.lastName.toLowerCase().includes(lower) ||
+        advocate.city.toLowerCase().includes(lower) ||
+        advocate.degree.toLowerCase().includes(lower) ||
+        advocate.specialties.some((s) => s.toLowerCase().includes(lower)) ||
+        String(advocate.yearsOfExperience).includes(term)
       );
     });
-
-    setFilteredAdvocates(filteredAdvocates);
-  };
-
-  const onClick = () => {
-    console.log(advocates);
-    setFilteredAdvocates(advocates);
-  };
+  }, [debounced, advocates]);
 
   return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
-      <br />
-      <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for: <span id="search-term"></span>
-        </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
-      </div>
-      <br />
-      <br />
-      <table>
-        <thead>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => {
-            return (
-              <tr>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <main className="mx-6 my-6">
+      <h1 className="text-2xl font-semibold mb-4">Solace Advocates</h1>
+      <SearchBar value={searchTerm} onChange={onChange} onReset={onClick} />
+      <AdvocatesResponsiveView data={filteredAdvocates} />
     </main>
   );
 }

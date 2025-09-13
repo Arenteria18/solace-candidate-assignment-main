@@ -39,3 +39,20 @@ npx drizzle-kit push
 ```bash
 curl -X POST http://localhost:3000/api/seed
 ```
+
+### Seed endpoint gating
+By default, the `/api/seed` route is restricted:
+- In development (NODE_ENV !== production), it is allowed without a token.
+- In production, set `SEED_ENABLED=true` and provide a `SEED_TOKEN` env var. Then include the header `x-seed-token: <token>` when calling the endpoint.
+
+Examples:
+
+```bash
+# dev environment (no token needed)
+curl -X POST http://localhost:3000/api/seed
+
+# production-like environment
+export SEED_ENABLED=true
+export SEED_TOKEN=my-secret
+curl -X POST http://localhost:3000/api/seed -H 'x-seed-token: my-secret'
+```

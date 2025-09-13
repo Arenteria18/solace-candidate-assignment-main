@@ -1,3 +1,66 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Theme*/
+:root {
+	--bg: 247 247 247; /* #f7f7f7 */
+	--text: 23 23 23; /* near-black */
+	--surface: 255 255 255; /* white */
+	--border: 226 232 240; /* slate-200ish */
+	--muted: 107 114 128; /* gray-500 */
+	--accent: 99 102 241; /* indigo-500 */
+	--focus: 59 130 246; /* blue-500 */
+}
+
+.theme-welcoming {
+	@apply min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--text))];
+}
+
+.surface {
+	@apply bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-md;
+}
+
+.caption {
+	@apply caption-top px-3 py-2 text-left text-sm text-[rgb(var(--muted))];
+}
+
+.table-base {
+	@apply min-w-full divide-y;
+	--tw-divide-opacity: 1;
+	--tw-divide-color: rgb(var(--border));
+}
+
+.thead-base {
+	@apply bg-[rgb(var(--bg))];
+}
+
+.th-base {
+	@apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide;
+}
+
+.tbody-base {
+	@apply bg-[rgb(var(--surface))] divide-y;
+	--tw-divide-opacity: 1;
+	--tw-divide-color: rgb(var(--border));
+}
+
+.tr-hover:hover {
+	@apply bg-[rgb(245,245,245)];
+}
+
+.td-base {
+	@apply px-4 py-2 text-sm;
+}
+
+.th-row {
+	@apply px-4 py-2 text-sm font-medium;
+}
+
+.list-bullets {
+	@apply list-disc pl-5 space-y-1;
+}
+
+.card {
+	@apply surface p-4;
+}
