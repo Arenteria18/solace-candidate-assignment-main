@@ -98,3 +98,17 @@ I am wrapping up here to not push too far past the recommended time. Here I will
 
 ### Versioning
 - API versioning strategy; deprecations with timelines.
+
+## Frontend performance and UX
+
+### List virtualization
+- Use react-window for large result sets in table and cards.
+
+### Accessibility upgrades
+- aria-sort on columns, keyboard nav, focus management on search updates, live region polish.
+
+### Iterate on card styles
+- AdvocateCard component could use some update designs. Needs easier readability. 
+
+### Server Components/Streaming
+- Stream initial results from the server; progressively hydrate filters.
